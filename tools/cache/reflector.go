@@ -23,6 +23,7 @@ import (
 	"io"
 	"math/rand"
 	"reflect"
+	"runtime/debug"
 	"sync"
 	"time"
 
@@ -355,6 +356,10 @@ func (r *Reflector) ListAndWatch(stopCh <-chan struct{}) error {
 // list simply lists all items and records a resource version obtained from the server at the moment of the call.
 // the resource version can be used for further progress notification (aka. watch).
 func (r *Reflector) list(stopCh <-chan struct{}) error {
+
+	fmt.Printf("Reflector.list called with stack, name=%s, expectedTypeName=%s\n", r.name, r.expectedTypeName)
+	debug.PrintStack()
+
 	var resourceVersion string
 	options := metav1.ListOptions{ResourceVersion: r.relistResourceVersion()}
 
